@@ -1,1 +1,237 @@
+*
+ * File:   schm5778_lab2B_core_v001.c
+ * Author: NoahS
+ *
+ * Created on February 8, 2023, 9:59 PM
+ */
+#include "xc.h"
+#include "schm5778_lab2B_header_v001.h"
+
+// CW1: FLASH CONFIGURATION WORD 1 (see PIC24 Family Reference Manual 24.1)
+#pragma config ICS = PGx1          // Comm Channel Select (Emulator EMUC1/EMUD1 pins are shared with PGC1/PGD1)
+#pragma config FWDTEN = OFF        // Watchdog Timer Enable (Watchdog Timer is disabled)
+#pragma config GWRP = OFF          // General Code Segment Write Protect (Writes to program memory are allowed)
+#pragma config GCP = OFF           // General Code Segment Code Protect (Code protection is disabled)
+#pragma config JTAGEN = OFF        // JTAG Port Enable (JTAG port is disabled)
+
+
+// CW2: FLASH CONFIGURATION WORD 2 (see PIC24 Family Reference Manual 24.1)
+#pragma config I2C1SEL = PRI       // I2C1 Pin Location Select (Use default SCL1/SDA1 pins)
+#pragma config IOL1WAY = OFF       // IOLOCK Protection (IOLOCK may be changed via unlocking seq)
+#pragma config OSCIOFNC = ON       // Primary Oscillator I/O Function (CLKO/RC15 functions as I/O pin)
+#pragma config FCKSM = CSECME      // Clock Switching and Monitor (Clock switching is enabled, 
+                                       // Fail-Safe Clock Monitor is enabled)
+#pragma config FNOSC = FRCPLL      // Oscillator Select (Fast RC Oscillator with PLL module (FRCPLL))
+
+void setup(){
+ //CLKDIVbits.RCDIV = 0;
+ //AD1PCFG = 0x9fff; 
+ TRISA = 0b1111111111111110;
+ LATA = 0x0000; 
+ CLKDIVbits.RCDIV = 0;  //Set RCDIV=1:1 (default 2:1) 32MHz or FCY/2=16M
+AD1PCFG = 0x9fff;            //sets all pins to digital I/O
+    //TRISA = 0b0000000000011111;  //set port A to inputs, 
+    //TRISB = 0b0000000000000011;  //and port B to outputs
+    //LATA = 0xffff;               //Set all of port A to HIGH
+    //LATB = 0xffff;               //and all of port B to HIGH
+}
+
+void writeColor(int R, int G, int B){ 
+for(int i = 0; i < 8; i++) {    
+        if((R & 0x80)== 0x80) {
+        write_1();           
+        }
+       
+        else{
+        write_0();    
+        }
+        R = R << 1;
+    }
+
+for(int i = 0; i < 8; i++) {    
+        if((G & 0x80)== 0x80) {
+        write_1();           
+        }
+       
+        else{
+        write_0();    
+        }
+        G = G << 1;
+    }
+
+for(int i = 0; i < 8; i++) {    
+        if((B & 0x80)== 0x80) {
+        write_1();           
+        }
+       
+        else{
+        write_0();    
+        }
+        B = B << 1;
+    }
+ djo_wait_100us();   
+}
+
+void colorchanger(){
+   for(int i = 0; i < 255; i++){
+       
+   writeColor(255-i, 0,i);    
+   djo_wait_1ms();
+   djo_wait_1ms();
+   djo_wait_1ms();
+   } 
+  for(int i = 0; i < 255; i++){
+       
+   writeColor(i, 0,255-i);    
+   djo_wait_1ms(); 
+   djo_wait_1ms();
+   djo_wait_1ms();
+   }   
+    
+}
+
+
+
+void fakewheel(){
+for( int i=0; i < 255; i++){    
+    int WheelPos = 0;
+    WheelPos = WheelPos + i; 
+
+if(WheelPos < 85){       
+writeColor(255 - WheelPos *3, 0, WheelPos*3);        
+   djo_wait_1ms(); 
+   djo_wait_1ms();
+   djo_wait_1ms();
+   djo_wait_1ms(); 
+   djo_wait_1ms();
+   djo_wait_1ms();
+   djo_wait_1ms(); 
+   djo_wait_1ms();
+   djo_wait_1ms();
+}
+
+else if(WheelPos < 170){
+   WheelPos = WheelPos-85; 
+writeColor(0, WheelPos*3 ,255 - WheelPos *3 );        
+   djo_wait_1ms(); 
+   djo_wait_1ms();
+   djo_wait_1ms();
+   djo_wait_1ms(); 
+   djo_wait_1ms();
+   djo_wait_1ms();
+   djo_wait_1ms(); 
+   djo_wait_1ms();
+   djo_wait_1ms();
+}
+else{
+WheelPos =WheelPos-170;    
+writeColor(WheelPos*3 , 255 - WheelPos *3, 0);           
+   djo_wait_1ms(); 
+   djo_wait_1ms();
+   djo_wait_1ms();
+   djo_wait_1ms(); 
+   djo_wait_1ms();
+   djo_wait_1ms();
+   djo_wait_1ms(); 
+   djo_wait_1ms();
+   djo_wait_1ms();
+}    
+}
+}
+
+
+unsigned long int packColor(unsigned char RED, unsigned char BLUE, unsigned char GREEN){
+
+unsigned long int RGBval = 0;
+RGBval = ((long) RED << 16) | ((long) GREEN << 8) | ((long) BLUE);    
+
+return RGBval;
+}
+
+unsigned long int UnpackColorRED(unsigned long int RGBval) {
+unsigned char RED = 0;   
+RED = (unsigned char) (RGBval >> 16);
+return RED;
+}
+
+unsigned long int UnpackColorGREEN(unsigned long int RGBval) {
+unsigned char GREEN = 0;     
+GREEN = (unsigned char) (RGBval >> 8);
+return GREEN;
+}
+
+unsigned long int UnpackColorBLUE(unsigned long int RGBval) {
+unsigned char BLUE = 0;     
+BLUE = (unsigned char) (RGBval >> 0);
+return BLUE;
+}
+
+void writePacCol(unsigned long int RGBVal) {
+    
+    writeColor(UnpackColorRED(RGBVal), UnpackColorGREEN(RGBVal), UnpackColorBLUE(RGBVal));
+}
+
+
+
+void wheel(){
+unsigned long int RGBVal;
+for( int i=0; i < 255; i++){    
+    int WheelPos = 0;
+    WheelPos = WheelPos+i; 
+
+if(WheelPos < 85){       
+RGBVal = packColor(255 - WheelPos *3, 0, WheelPos*3); 
+writePacCol(RGBVal);
+   djo_wait_1ms(); 
+   djo_wait_1ms();
+   djo_wait_1ms();
+   djo_wait_1ms(); 
+   djo_wait_1ms();
+   djo_wait_1ms();
+   djo_wait_1ms(); 
+   djo_wait_1ms();
+   djo_wait_1ms();}
+
+    else if(WheelPos < 170){
+ 
+RGBVal = packColor(0, WheelPos*3 ,255 - WheelPos *3 );        
+writePacCol(RGBVal);
+   djo_wait_1ms(); 
+   djo_wait_1ms();
+   djo_wait_1ms();
+   djo_wait_1ms(); 
+   djo_wait_1ms();
+   djo_wait_1ms();
+   djo_wait_1ms(); 
+   djo_wait_1ms();
+   djo_wait_1ms();}
+
+    else{    
+RGBVal = packColor(WheelPos*3 , 255 - WheelPos *3, 0);        
+writePacCol(RGBVal);
+   djo_wait_1ms(); 
+   djo_wait_1ms();
+   djo_wait_1ms();
+   djo_wait_1ms(); 
+   djo_wait_1ms();
+   djo_wait_1ms();
+   djo_wait_1ms(); 
+   djo_wait_1ms();
+   djo_wait_1ms();}
+}    
+}
+
+
+int main(void) {
+    
+    setup();
+    
+    while(1==1)
+    {
+    //    colorchanger();
+    writeColor(0, 0, 255);   
+     //  wheel();
+    }
+    return 0;
+}
 
