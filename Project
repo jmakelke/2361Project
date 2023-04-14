@@ -235,3 +235,32 @@ int main(void) {
     return 0;
 }
 
+void writeColor(int R, int G, int B, int numLEDs){ 
+    for(int i = 0; i < numLEDs; i++) {
+        for(int j = 0; j < 8; j++) {    
+            if((R & 0x80)== 0x80) {
+                write_1();           
+            } else {
+                write_0();    
+            }
+            R = R << 1;
+        }
+        for(int j = 0; j < 8; j++) {    
+            if((G & 0x80)== 0x80) {
+                write_1();           
+            } else {
+                write_0();    
+            }
+            G = G << 1;
+        }
+        for(int j = 0; j < 8; j++) {    
+            if((B & 0x80)== 0x80) {
+                write_1();           
+            } else {
+                write_0();    
+            }
+            B = B << 1;
+        }
+        djo_wait_100us();   
+    }
+}
