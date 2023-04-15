@@ -36,7 +36,7 @@ AD1PCFG = 0x9fff;            //sets all pins to digital I/O
     //LATB = 0xffff;               //and all of port B to HIGH
 }
 
-void writeColor(int R, int G, int B){ 
+void writeColor(int R, int G, int B, int t){ 
 for(int i = 0; i < 8; i++) {    
         if((R & 0x80)== 0x80) {
         write_1();           
@@ -166,6 +166,9 @@ BLUE = (unsigned char) (RGBval >> 0);
 return BLUE;
 }
 
+
+//bunch of old functions from LAB2B // Maybe looking into packing more for the LED problems?
+
 void writePacCol(unsigned long int RGBVal) {
     
     writeColor(UnpackColorRED(RGBVal), UnpackColorGREEN(RGBVal), UnpackColorBLUE(RGBVal));
@@ -220,7 +223,7 @@ writePacCol(RGBVal);
    djo_wait_1ms();}
 }    
 }
-
+// end of old functions
 
 int main(void) {
     
@@ -229,7 +232,7 @@ int main(void) {
     while(1==1)
     {
     //    colorchanger();
-    writeColor(0, 0, 255);   
+    writeColor(0, 0, 255, 8);   
      //  wheel();
     }
     return 0;
