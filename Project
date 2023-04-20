@@ -1,9 +1,14 @@
-*
- * File:   schm5778_lab2B_core_v001.c
- * Author: NoahS
- *
- * Created on February 8, 2023, 9:59 PM
- */
+
+//This code just turns all the lights on the LED to max.
+
+
+
+//*
+// * File:   schm5778_lab2B_core_v001.c
+// * Author: NoahS
+// *
+// * Created on February 8, 2023, 9:59 PM
+// */
 #include "xc.h"
 #include "schm5778_lab2B_header_v001.h"
 
@@ -37,192 +42,196 @@ AD1PCFG = 0x9fff;            //sets all pins to digital I/O
 }
 
 void writeColor(int R, int G, int B, int t){ 
-for(int i = 0; i < 8; i++) {    
-        if((R & 0x80)== 0x80) {
-        write_1();           
-        }
-       
-        else{
-        write_0();    
-        }
-        R = R << 1;
-    }
-
-for(int i = 0; i < 8; i++) {    
-        if((G & 0x80)== 0x80) {
-        write_1();           
-        }
-       
-        else{
-        write_0();    
-        }
-        G = G << 1;
-    }
-
-for(int i = 0; i < 8; i++) {    
-        if((B & 0x80)== 0x80) {
-        write_1();           
-        }
-       
-        else{
-        write_0();    
-        }
-        B = B << 1;
-    }
+//for(int i = 0; i < 72; i++) {    
+//        if((R & 0x80)== 0x80) {
+//        write_1();           
+//        }
+//       
+//        else{
+//        write_0();    
+//        }
+//        R = R << 1;
+//    }
+//
+//for(int i = 0; i < 72; i++) {    
+//        if((G & 0x80)== 0x80) {
+//        write_1();           
+//        }
+//       
+//        else{
+//        write_0();    
+//        }
+//        G = G << 1;
+//    }
+//
+//for(int i = 0; i < 72; i++) {    
+//        if((B & 0x80)== 0x80) {
+//        write_1();           
+//        }
+//       
+//        else{
+//        write_0();    
+//        }
+//        B = B << 1;
+//    }
+    
+for( int i=0; i < 192; i++){
+        write_0();
+}    
  djo_wait_100us();   
 }
+//
+//void colorchanger(){
+//   for(int i = 0; i < 255; i++){
+//       
+//   writeColor(255-i, 0,i);    
+//   djo_wait_1ms();
+//   djo_wait_1ms();
+//   djo_wait_1ms();
+//   } 
+//  for(int i = 0; i < 255; i++){
+//       
+//   writeColor(i, 0,255-i);    
+//   djo_wait_1ms(); 
+//   djo_wait_1ms();
+//   djo_wait_1ms();
+//   }   
+//    
+//}
+//
+//
+//
+//void fakewheel(){
+//for( int i=0; i < 255; i++){    
+//    int WheelPos = 0;
+//    WheelPos = WheelPos + i; 
+//
+//if(WheelPos < 85){       
+//writeColor(255 - WheelPos *3, 0, WheelPos*3);        
+//   djo_wait_1ms(); 
+//   djo_wait_1ms();
+//   djo_wait_1ms();
+//   djo_wait_1ms(); 
+//   djo_wait_1ms();
+//   djo_wait_1ms();
+//   djo_wait_1ms(); 
+//   djo_wait_1ms();
+//   djo_wait_1ms();
+//}
+//
+//else if(WheelPos < 170){
+//   WheelPos = WheelPos-85; 
+//writeColor(0, WheelPos*3 ,255 - WheelPos *3 );        
+//   djo_wait_1ms(); 
+//   djo_wait_1ms();
+//   djo_wait_1ms();
+//   djo_wait_1ms(); 
+//   djo_wait_1ms();
+//   djo_wait_1ms();
+//   djo_wait_1ms(); 
+//   djo_wait_1ms();
+//   djo_wait_1ms();
+//}
+//else{
+//WheelPos =WheelPos-170;    
+//writeColor(WheelPos*3 , 255 - WheelPos *3, 0);           
+//   djo_wait_1ms(); 
+//   djo_wait_1ms();
+//   djo_wait_1ms();
+//   djo_wait_1ms(); 
+//   djo_wait_1ms();
+//   djo_wait_1ms();
+//   djo_wait_1ms(); 
+//   djo_wait_1ms();
+//   djo_wait_1ms();
+//}    
+//}
+//}
+//
+//
+//unsigned long int packColor(unsigned char RED, unsigned char BLUE, unsigned char GREEN){
+//
+//unsigned long int RGBval = 0;
+//RGBval = ((long) RED << 16) | ((long) GREEN << 8) | ((long) BLUE);    
+//
+//return RGBval;
+//}
+//
+//unsigned long int UnpackColorRED(unsigned long int RGBval) {
+//unsigned char RED = 0;   
+//RED = (unsigned char) (RGBval >> 16);
+//return RED;
+//}
+//
+//unsigned long int UnpackColorGREEN(unsigned long int RGBval) {
+//unsigned char GREEN = 0;     
+//GREEN = (unsigned char) (RGBval >> 8);
+//return GREEN;
+//}
+//
+//unsigned long int UnpackColorBLUE(unsigned long int RGBval) {
+//unsigned char BLUE = 0;     
+//BLUE = (unsigned char) (RGBval >> 0);
+//return BLUE;
+//}
+//
+//
+////bunch of old functions from LAB2B // Maybe looking into packing more for the LED problems?
+//
+//void writePacCol(unsigned long int RGBVal) {
+//    
+//    writeColor(UnpackColorRED(RGBVal), UnpackColorGREEN(RGBVal), UnpackColorBLUE(RGBVal));
+//}
+//
 
-void colorchanger(){
-   for(int i = 0; i < 255; i++){
-       
-   writeColor(255-i, 0,i);    
-   djo_wait_1ms();
-   djo_wait_1ms();
-   djo_wait_1ms();
-   } 
-  for(int i = 0; i < 255; i++){
-       
-   writeColor(i, 0,255-i);    
-   djo_wait_1ms(); 
-   djo_wait_1ms();
-   djo_wait_1ms();
-   }   
-    
-}
-
-
-
-void fakewheel(){
-for( int i=0; i < 255; i++){    
-    int WheelPos = 0;
-    WheelPos = WheelPos + i; 
-
-if(WheelPos < 85){       
-writeColor(255 - WheelPos *3, 0, WheelPos*3);        
-   djo_wait_1ms(); 
-   djo_wait_1ms();
-   djo_wait_1ms();
-   djo_wait_1ms(); 
-   djo_wait_1ms();
-   djo_wait_1ms();
-   djo_wait_1ms(); 
-   djo_wait_1ms();
-   djo_wait_1ms();
-}
-
-else if(WheelPos < 170){
-   WheelPos = WheelPos-85; 
-writeColor(0, WheelPos*3 ,255 - WheelPos *3 );        
-   djo_wait_1ms(); 
-   djo_wait_1ms();
-   djo_wait_1ms();
-   djo_wait_1ms(); 
-   djo_wait_1ms();
-   djo_wait_1ms();
-   djo_wait_1ms(); 
-   djo_wait_1ms();
-   djo_wait_1ms();
-}
-else{
-WheelPos =WheelPos-170;    
-writeColor(WheelPos*3 , 255 - WheelPos *3, 0);           
-   djo_wait_1ms(); 
-   djo_wait_1ms();
-   djo_wait_1ms();
-   djo_wait_1ms(); 
-   djo_wait_1ms();
-   djo_wait_1ms();
-   djo_wait_1ms(); 
-   djo_wait_1ms();
-   djo_wait_1ms();
-}    
-}
-}
-
-
-unsigned long int packColor(unsigned char RED, unsigned char BLUE, unsigned char GREEN){
-
-unsigned long int RGBval = 0;
-RGBval = ((long) RED << 16) | ((long) GREEN << 8) | ((long) BLUE);    
-
-return RGBval;
-}
-
-unsigned long int UnpackColorRED(unsigned long int RGBval) {
-unsigned char RED = 0;   
-RED = (unsigned char) (RGBval >> 16);
-return RED;
-}
-
-unsigned long int UnpackColorGREEN(unsigned long int RGBval) {
-unsigned char GREEN = 0;     
-GREEN = (unsigned char) (RGBval >> 8);
-return GREEN;
-}
-
-unsigned long int UnpackColorBLUE(unsigned long int RGBval) {
-unsigned char BLUE = 0;     
-BLUE = (unsigned char) (RGBval >> 0);
-return BLUE;
-}
-
-
-//bunch of old functions from LAB2B // Maybe looking into packing more for the LED problems?
-
-void writePacCol(unsigned long int RGBVal) {
-    
-    writeColor(UnpackColorRED(RGBVal), UnpackColorGREEN(RGBVal), UnpackColorBLUE(RGBVal));
-}
-
-
-
-void wheel(){
-unsigned long int RGBVal;
-for( int i=0; i < 255; i++){    
-    int WheelPos = 0;
-    WheelPos = WheelPos+i; 
-
-if(WheelPos < 85){       
-RGBVal = packColor(255 - WheelPos *3, 0, WheelPos*3); 
-writePacCol(RGBVal);
-   djo_wait_1ms(); 
-   djo_wait_1ms();
-   djo_wait_1ms();
-   djo_wait_1ms(); 
-   djo_wait_1ms();
-   djo_wait_1ms();
-   djo_wait_1ms(); 
-   djo_wait_1ms();
-   djo_wait_1ms();}
-
-    else if(WheelPos < 170){
- 
-RGBVal = packColor(0, WheelPos*3 ,255 - WheelPos *3 );        
-writePacCol(RGBVal);
-   djo_wait_1ms(); 
-   djo_wait_1ms();
-   djo_wait_1ms();
-   djo_wait_1ms(); 
-   djo_wait_1ms();
-   djo_wait_1ms();
-   djo_wait_1ms(); 
-   djo_wait_1ms();
-   djo_wait_1ms();}
-
-    else{    
-RGBVal = packColor(WheelPos*3 , 255 - WheelPos *3, 0);        
-writePacCol(RGBVal);
-   djo_wait_1ms(); 
-   djo_wait_1ms();
-   djo_wait_1ms();
-   djo_wait_1ms(); 
-   djo_wait_1ms();
-   djo_wait_1ms();
-   djo_wait_1ms(); 
-   djo_wait_1ms();
-   djo_wait_1ms();}
-}    
-}
+//
+//void wheel(){
+//unsigned long int RGBVal;
+//for( int i=0; i < 255; i++){    
+//    int WheelPos = 0;
+//    WheelPos = WheelPos+i; 
+//
+//if(WheelPos < 85){       
+//RGBVal = packColor(255 - WheelPos *3, 0, WheelPos*3); 
+//writePacCol(RGBVal);
+//   djo_wait_1ms(); 
+//   djo_wait_1ms();
+//   djo_wait_1ms();
+//   djo_wait_1ms(); 
+//   djo_wait_1ms();
+//   djo_wait_1ms();
+//   djo_wait_1ms(); 
+//   djo_wait_1ms();
+//   djo_wait_1ms();}
+//
+//    else if(WheelPos < 170){
+// 
+//RGBVal = packColor(0, WheelPos*3 ,255 - WheelPos *3 );        
+//writePacCol(RGBVal);
+//   djo_wait_1ms(); 
+//   djo_wait_1ms();
+//   djo_wait_1ms();
+//   djo_wait_1ms(); 
+//   djo_wait_1ms();
+//   djo_wait_1ms();
+//   djo_wait_1ms(); 
+//   djo_wait_1ms();
+//   djo_wait_1ms();}
+//
+//    else{    
+//RGBVal = packColor(WheelPos*3 , 255 - WheelPos *3, 0);        
+//writePacCol(RGBVal);
+//   djo_wait_1ms(); 
+//   djo_wait_1ms();
+//   djo_wait_1ms();
+//   djo_wait_1ms(); 
+//   djo_wait_1ms();
+//   djo_wait_1ms();
+//   djo_wait_1ms(); 
+//   djo_wait_1ms();
+//   djo_wait_1ms();}
+//}    
+//}
 // end of old functions
 
 int main(void) {
@@ -232,7 +241,7 @@ int main(void) {
     while(1==1)
     {
     //    colorchanger();
-    writeColor(0, 0, 255, 8);   
+    writeColor(50, 50, 50, 8);   
      //  wheel();
     }
     return 0;
