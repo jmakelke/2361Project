@@ -1,0 +1,141 @@
+/This code just turns all the lights on the LED to max.
+
+
+
+//*
+// * File:   schm5778_lab2B_core_v001.c
+// * Author: NoahS
+// *
+// * Created on February 8, 2023, 9:59 PM
+// */
+#include "xc.h"
+#include "schm5778_lab2B_header_v001.h"
+
+// CW1: FLASH CONFIGURATION WORD 1 (see PIC24 Family Reference Manual 24.1)
+#pragma config ICS = PGx1          // Comm Channel Select (Emulator EMUC1/EMUD1 pins are shared with PGC1/PGD1)
+#pragma config FWDTEN = OFF        // Watchdog Timer Enable (Watchdog Timer is disabled)
+#pragma config GWRP = OFF          // General Code Segment Write Protect (Writes to program memory are allowed)
+#pragma config GCP = OFF           // General Code Segment Code Protect (Code protection is disabled)
+#pragma config JTAGEN = OFF        // JTAG Port Enable (JTAG port is disabled)
+
+
+// CW2: FLASH CONFIGURATION WORD 2 (see PIC24 Family Reference Manual 24.1)
+#pragma config I2C1SEL = PRI       // I2C1 Pin Location Select (Use default SCL1/SDA1 pins)
+#pragma config IOL1WAY = OFF       // IOLOCK Protection (IOLOCK may be changed via unlocking seq)
+#pragma config OSCIOFNC = ON       // Primary Oscillator I/O Function (CLKO/RC15 functions as I/O pin)
+#pragma config FCKSM = CSECME      // Clock Switching and Monitor (Clock switching is enabled, 
+                                       // Fail-Safe Clock Monitor is enabled)
+#pragma config FNOSC = FRCPLL      // Oscillator Select (Fast RC Oscillator with PLL module (FRCPLL))
+
+void setup(){
+ //CLKDIVbits.RCDIV = 0;
+ //AD1PCFG = 0x9fff; 
+ TRISA = 0b1111111111111110;
+ LATA = 0x0000; 
+ CLKDIVbits.RCDIV = 0;  //Set RCDIV=1:1 (default 2:1) 32MHz or FCY/2=16M
+AD1PCFG = 0x9fff;            //sets all pins to digital I/O
+    //TRISA = 0b0000000000011111;  //set port A to inputs, 
+    //TRISB = 0b0000000000000011;  //and port B to outputs
+    //LATA = 0xffff;               //Set all of port A to HIGH
+    //LATB = 0xffff;               //and all of port B to HIGH
+}
+
+//Just used to grab the temp from the ADC
+
+void getTemp(){
+
+int temp = // Whatever the thing is from the board
+
+}
+
+void writeColor(array1[], array2[], array3[], array4[], array5[], array6[], array7[], array8[], size){ 
+
+for( int i=0; i < size; i++){
+if(array1[i] == 0){
+
+write_0();
+
+}
+else if(array1[i] == 1){
+
+write_1();
+
+}    
+}
+ 
+ 
+ 
+ 
+ djo_wait_100us();   
+}
+
+//Maybe make an array for each LED
+
+
+
+
+
+
+
+int main(void) { 
+    setup();
+   int temp;
+   
+   //These arrays are going to be used to set the brightness, send the arrays in a certain order to the board. 
+   
+   unsigned double ArrayRLow[24]= [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1];  
+   unsigned double ArrayLow[24] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1];
+   unsigned double ArrayMid[24] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1];
+   unsigned double ArrayHigh[24]= [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1];
+    
+    //While statement will be used to constantly check the value of the temp value
+    
+    while(1==1)
+    {
+temp = getTemp();
+
+    if (Temp > 90) {                       //LED 8 activated
+
+
+
+}
+
+else if ((Temp > 85) && (Temp <= 90)) {   //LED  7 activated
+
+
+
+}
+else if ((Temp > 80) && (Temp <= 85)) {   //LED  6 activated
+
+
+
+}
+else if ((Temp > 75) && (Temp <= 80)) {  //LED  5 activated
+
+
+
+}
+else if ((Temp > 70) && (Temp <= 75)) { //LED 4 activated
+
+
+
+}
+else if ((Temp > 65) && (Temp <= 70)) { //LED 3 activated
+
+
+
+}
+else if ((Temp > 60) && (Temp <= 65)) { //LED 2 activated
+
+
+
+}
+else if ((Temp > 55) && (Temp <= 60)) { //LED 1 activated
+
+
+
+}
+
+    }
+    return 0;
+}
