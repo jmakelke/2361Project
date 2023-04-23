@@ -1,0 +1,16 @@
+#ifndef CIRCULAR_BUFFER_H
+#define CIRCULAR_BUFFER_H
+
+#include <stdint.h>
+
+// Define the buffer size with a compiler macro
+#ifndef BUFFER_SIZE
+#define BUFFER_SIZE 128
+#endif
+
+// Function prototypes
+void putVal(int newValue);
+int getAvg();
+void initBuffer();
+
+#endif // CIRCULAR_BUFFER_H
