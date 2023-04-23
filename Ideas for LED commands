@@ -1,5 +1,3 @@
-
-
 //*
 // * File:   schm5778_lab2B_core_v001.c
 // * Author: NoahS
@@ -42,11 +40,11 @@ AD1PCFG = 0x9fff;            //sets all pins to digital I/O
 
 void getTemp(){
 
-int temp = // Whatever the thing is from the board
+int temp = 70;// Whatever the thing is from the board
 
 }
 
-void writeColor(array1[], array2[], array3[], array4[], array5[], array6[], array7[], array8[], size){ 
+void writeColor(int array1[], int array2[], int array3[], int array4[], int array5[], int array6[], int array7[], int array8[], int size){ 
 
 
 
@@ -171,7 +169,7 @@ for( int i=0; i < size; i++){
 
 int main(void) { 
     setup();
-   int temp;
+   int Temp;
    
    //These arrays are going to be used to set the brightness, send the arrays in a certain order to the board. 
    
@@ -191,7 +189,7 @@ int main(void) {
 //Constantly gets the temperature. When mixed with the LCD code we should try to put all thats in main in this
 //function into the timer 2 interrupt so we don't need to use blocking code for the delay.
 
-temp = getTemp();
+Temp = getTemp();
 
 
 //The way this works is it sends the array values in a certain order to change the brightness. '24' is just
@@ -200,43 +198,43 @@ temp = getTemp();
 
 if (Temp > 90) {                       //LED 8 activated
 
-writeColor(High, Mid, Low, RLow, None, None, None, None, 24)
+writeColor(High, Mid, Low, RLow, None, None, None, None, 24);
 
 }
 
 else if ((Temp > 85) && (Temp <= 90)) {   //LED  7 activated
 
-writeColor(Mid, High, Mid, Low, RLow, None, None, None, 24)
+writeColor(Mid, High, Mid, Low, RLow, None, None, None, 24);
 
 }
 else if ((Temp > 80) && (Temp <= 85)) {   //LED  6 activated
 
-writeColor(Low, Mid, High, Mid, Low, RLow, None, None, 24)
+writeColor(Low, Mid, High, Mid, Low, RLow, None, None, 24);
 
 }
 else if ((Temp > 75) && (Temp <= 80)) {  //LED  5 activated
 
-writeColor(RLow, Low, Mid, High, Mid, Low, RLow, None, 24)
+writeColor(RLow, Low, Mid, High, Mid, Low, RLow, None, 24);
 
 }
 else if ((Temp > 70) && (Temp <= 75)) { //LED 4 activated
 
-writeColor(None, RLow, Low, Mid, High, Mid, Low, RLow, 24)
+writeColor(None, RLow, Low, Mid, High, Mid, Low, RLow, 24);
 
 }
 else if ((Temp > 65) && (Temp <= 70)) { //LED 3 activated
 
-writeColor(None, None, RLow, Low, Mid, High, Mid, Low, 24)
+writeColor(None, None, RLow, Low, Mid, High, Mid, Low, 24);
 
 }
 else if ((Temp > 60) && (Temp <= 65)) { //LED 2 activated
 
-writeColor(None, None, None, RLow, Low, Mid, High, Mid, 24)
+writeColor(None, None, None, RLow, Low, Mid, High, Mid, 24);
 
 }
 else if ((Temp > 55) && (Temp <= 60)) { //LED 1 activated
 
-writeColor(None, None, None, None, RLow, Low, Mid, High, 24)
+writeColor(None, None, None, None, RLow, Low, Mid, High, 24);
 
 }
 
