@@ -1,0 +1,504 @@
+//// */
+#include "xc.h"
+#include "schm5778_lab2B_header_v001.h"
+#include <p24FJ64GA002.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+
+
+// CW1: FLASH CONFIGURATION WORD 1 (see PIC24 Family Reference Manual 24.1)
+#pragma config ICS = PGx1          // Comm Channel Select (Emulator EMUC1/EMUD1 pins are shared with PGC1/PGD1)
+#pragma config FWDTEN = OFF        // Watchdog Timer Enable (Watchdog Timer is disabled)
+#pragma config GWRP = OFF          // General Code Segment Write Protect (Writes to program memory are allowed)
+#pragma config GCP = OFF           // General Code Segment Code Protect (Code protection is disabled)
+#pragma config JTAGEN = OFF        // JTAG Port Enable (JTAG port is disabled)
+
+
+// CW2: FLASH CONFIGURATION WORD 2 (see PIC24 Family Reference Manual 24.1)
+#pragma config I2C1SEL = PRI       // I2C1 Pin Location Select (Use default SCL1/SDA1 pins)
+#pragma config IOL1WAY = OFF       // IOLOCK Protection (IOLOCK may be changed via unlocking seq)
+#pragma config OSCIOFNC = ON       // Primary Oscillator I/O Function (CLKO/RC15 functions as I/O pin)
+#pragma config FCKSM = CSECME      // Clock Switching and Monitor (Clock switching is enabled, 
+                                       // Fail-Safe Clock Monitor is enabled)
+#pragma config FNOSC = FRCPLL      // Oscillator Select (Fast RC Oscillator with PLL module (FRCPLL))
+
+//void setup(){
+// //CLKDIVbits.RCDIV = 0;
+// //AD1PCFG = 0x9fff; 
+//// TRISA = 0b1111111111111110;
+////// TRISBbits.TRISB15 = 0; // Set RB15 as an output
+////// LATB = 0x0000;
+//// LATA = 0x0000; 
+//// CLKDIVbits.RCDIV = 0;  //Set RCDIV=1:1 (default 2:1) 32MHz or FCY/2=16M
+////AD1PCFG = 0x9ffd;            //sets all pins to digital I/O
+//    //TRISA = 0b0000000000011111;  //set port A to inputs, 
+//    //TRISB = 0b0000000000000011;  //and port B to outputs
+//    //LATA = 0xffff;               //Set all of port A to HIGH
+//    //LATB = 0xffff;               //and all of port B to HIGH
+//}
+volatile int Temperature;
+////Just used to grab the temp from the ADC
+//
+int getTemp(){
+
+int Temp = Temperature;// Whatever the thing is from the board
+
+return Temp;
+}
+
+void writeColor(double array1[], double array2[], double array3[], double array4[], double array5[], double array6[], double array7[], double array8[], int size){ 
+
+
+
+for( int i=0; i < size; i++){
+  if(array8[i] == 0){
+
+      write_0();
+
+}
+  else if(array8[i] == 1){
+
+      write_1();
+}    
+}
+
+
+
+for( int i=0; i < size; i++){
+  if(array7[i] == 0){
+
+      write_0();
+
+}
+  else if(array7[i] == 1){
+
+      write_1();
+}    
+}
+
+
+
+for( int i=0; i < size; i++){
+  if(array6[i] == 0){
+
+      write_0();
+
+}
+  else if(array6[i] == 1){
+
+      write_1();
+}    
+} 
+
+
+
+for( int i=0; i < size; i++){
+  if(array5[i] == 0){
+
+      write_0();
+
+}
+  else if(array5[i] == 1){
+
+      write_1();
+}    
+}
+
+
+
+for( int i=0; i < size; i++){
+  if(array4[i] == 0){
+
+      write_0();
+
+}
+  else if(array4[i] == 1){
+
+      write_1();
+}    
+}
+
+
+
+for( int i=0; i < size; i++){
+  if(array3[i] == 0){
+
+      write_0();
+
+}
+  else if(array3[i] == 1){
+
+      write_1();
+}    
+}
+
+
+
+for( int i=0; i < size; i++){
+  if(array2[i] == 0){
+
+      write_0();
+
+}
+  else if(array2[i] == 1){
+
+      write_1();
+}    
+}
+
+
+
+for( int i=0; i < size; i++){
+  if(array1[i] == 0){
+
+      write_0();
+
+}
+  else if(array1[i] == 1){
+
+      write_1();
+}    
+}
+
+
+ djo_wait_100us();   
+}
+//
+//
+#define BUFFER_SIZE 128
+//
+//
+//
+int Tempmain(int Temp) { 
+   
+   
+   
+   //These arrays are going to be used to set the brightness, send the arrays in a certain order to the board. 
+   
+   //This may be a lot harder if we try to do different colors instead of brightness, but should be possible. 
+//   
+   double None[24]= {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+   //double RLow[24]= {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};  
+   
+   double BLow[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1};
+   double BMid[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1};
+   double BHigh[24]= {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1};
+   
+   
+   double YLow[24] = {0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0};
+   double YMid[24] = {0,0,0,0,0,1,1,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0};
+   double YHigh[24]= {0,0,1,1,1,1,1,1,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0};
+   
+   double GLow[24] = {0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+   double GMid[24] = {0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+   double GHigh[24]= {0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+   
+   double OLow[24] = {0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0};
+   double OMid[24] = {0,0,0,0,0,1,1,1,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0};
+   double OHigh[24]= {0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0};
+   
+   double RLow[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0};
+   double RMid[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0};
+   double RHigh[24]= {0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0};
+   
+   
+    
+    //While statement will be used to constantly check the value of the temp value
+    
+   while()
+//    {
+
+//Constantly gets the temperature. When mixed with the LCD code we should try to put all thats in main in this
+//function into the timer 2 interrupt so we don't need to use blocking code for the delay.
+
+//Temp = getTemp();
+
+
+//The way this works is it sends the array values in a certain order to change the brightness. '24' is just
+//used for the size variable in the function it is passed into. The first thing passed into the function
+//will be put onto the 8th LED, and the last spot will be on the 1st.
+
+if (Temp > 90) {                       //LED 8 activated
+
+writeColor(RHigh, RMid, OLow, None, None, None, None, None, 24);
+
+}
+
+else if ((Temp > 85) && (Temp <= 90)) {   //LED  7 activated
+
+writeColor(RMid, RHigh, OMid, YLow, None, None, None, None, 24);
+
+}
+else if ((Temp > 80) && (Temp <= 85)) {   //LED  6 activated
+
+writeColor(RLow, RMid, OHigh, YMid, YLow, None, None, None, 24);
+
+}
+else if ((Temp > 75) && (Temp <= 80)) {  //LED  5 activated
+
+writeColor(None, RLow, OMid, YHigh, YMid, GLow, None, None, 24);
+
+}
+else if ((Temp > 70) && (Temp <= 75)) { //LED 4 activated
+
+writeColor(None, None, OLow, YMid, YHigh, GMid, BLow, None, 24);
+
+}
+else if ((Temp > 65) && (Temp <= 70)) { //LED 3 activated
+
+writeColor(None, None, None, YLow, YMid, GHigh, BMid, BLow, 24);
+
+}
+else if ((Temp > 60) && (Temp <= 65)) { //LED 2 activated
+
+writeColor(None, None, None, None, YLow, GMid, BHigh, BMid, 24);
+
+}
+else if ((Temp > 55) && (Temp <= 60)) { //LED 1 activated
+
+writeColor(None, None, None, None, None, GLow, BMid, BHigh, 24);
+
+//}
+
+    }
+    return 0;
+}
+
+static int buffer[BUFFER_SIZE];
+static uint16_t bufferIndex = 0;
+static uint32_t bufferSum = 0;
+
+
+
+void putVal(int newValue) {
+	// Subtract the oldest value from the sum
+	bufferSum -= buffer[bufferIndex];
+
+	// Add the new value to the buffer and update the sum
+	buffer[bufferIndex] = newValue;
+	bufferSum += newValue;
+
+	// Increment the index and wrap it if necessary
+	bufferIndex = (bufferIndex + 1) % BUFFER_SIZE;
+}
+
+int getAvg() {
+	int average = bufferSum / BUFFER_SIZE;
+	return average;
+}
+
+void initBuffer() {
+	// Initialize the buffer with zeros
+	for (uint16_t i = 0; i < BUFFER_SIZE; i++) {
+		buffer[i] = 0;
+	}
+
+	// Reset the buffer index and sum
+	bufferIndex = 0;
+	bufferSum = 0;
+}
+
+
+
+#define K 16 
+
+void initADC(void) {
+    AD1PCFGbits.PCFG1 = 0;         // Set AN0 as an analog input
+    AD1CON1 = 0x00E0;              // SSRC<2:0> = 010 to use Timer 3
+    AD1CON2 = 0;                   // Configure voltage reference (Vdd and GND)
+    AD1CON3 = 0x1F02;              // Sample time = 31 TAD, TAD = 2 * Tcy
+    AD1CSSL = 0;
+    AD1CHS = 0x0001;                 // No scanning required
+    IEC0bits.AD1IE = 1;            // Enable ADC interrupt
+    IFS0bits.AD1IF = 0;            // Clear ADC interrupt flag
+    AD1CON1bits.ADON = 1;          // Turn on ADC
+}
+
+void initTimer3(void) {
+    T3CON = 0x0010;                // Use prescaler 1:8 (500kHz)
+    PR3 = 3125;                    // Timer period = 500kHz / 16 = 31250; (16 samples per second)
+    TMR3 = 0;                      // Reset timer count
+    IEC0bits.T3IE = 1;             // Enable Timer 3 interrupt
+    IFS0bits.T3IF = 0;             // Clear Timer 3 interrupt flag
+    T3CONbits.TON = 1;             // Turn on Timer 3
+
+
+}
+
+
+void __attribute__((__interrupt__,__auto_psv__)) _T3Interrupt(void) {
+    IFS0bits.T3IF = 0;       // Clear Timer 3 interrupt flag
+    AD1CON1bits.SAMP = 1;    // Start sampling
+
+}
+
+void __attribute__((__interrupt__,__auto_psv__)) _ADC1Interrupt(void) {
+    IFS0bits.AD1IF = 0;      // Clear ADC interrupt flag
+    putVal(ADC1BUF0);        // Add ADC value to the buffer
+}
+
+void main(void) {
+    init();
+    initADC();
+    initTimer3();
+    lcd_init();
+
+    // Initialize the circular buffer
+    initBuffer();
+
+    // Variables to store ADC value and string
+    int adValue;
+    float temperature;
+    char tempStr[20];
+
+    while (1) {
+        // Calculate the average of the buffer values
+        adValue = getAvg();
+        float voltage = (3.3/1024) * adValue;
+        temperature = (voltage-0.5) * 100; 
+        Tempmain(temperature);
+        sprintf(tempStr, "%6.2f C", temperature);
+        // Write the voltage value to the LCD
+        lcd_printStr(tempStr);
+
+
+        // Wait 100ms before updating the LCD
+        delay_ms(100);
+    }
+}
+
+
+void delay_ms(unsigned int ms){
+    while (ms-- > 0){
+        asm("repeat #15998");
+        asm("nop");
+    }
+}
+
+void init(void){
+    _RCDIV = 0;
+//
+TRISA = 0b1111111111111110;
+ LATA = 0x0000; 
+ //Set RCDIV=1:1 (default 2:1) 32MHz or FCY/2=16M
+AD1PCFG = 0x9ffd;            //sets all pins to digital I/O
+}
+
+void lcd_cmd(char cmd) {
+    I2C2CONbits.SEN = 1;
+    while(I2C2CONbits.SEN == 1);
+    IFS3bits.MI2C2IF = 0;
+    
+    I2C2TRN = 0x7C;
+    while(IFS3bits.MI2C2IF == 0);
+    IFS3bits.MI2C2IF = 0;
+    
+    I2C2TRN = 0x00;
+    while(IFS3bits.MI2C2IF == 0);
+    IFS3bits.MI2C2IF = 0;
+    
+    I2C2TRN = cmd;
+    while(IFS3bits.MI2C2IF == 0);
+    IFS3bits.MI2C2IF = 0;
+    
+    I2C2CONbits.PEN = 1;
+    while(I2C2CONbits.PEN ==1);
+}
+
+void lcd_init(void) {
+    I2C2BRG = 0x9D;
+    IFS3bits.MI2C2IF = 0;
+    I2C2CONbits.I2CEN = 1;
+    
+    delay_ms(40);
+     
+    lcd_cmd(0b00111000); // Function set: 8-bit interface, normal instruction mode
+    lcd_cmd(0b00111001); // Function set: 8-bit interface, extended instruction mode
+    lcd_cmd(0b00010100); // Internal OSC frequency
+    lcd_cmd(0b01110000); // Contrast set
+    lcd_cmd(0b01010110); // Power/ICON/Contrast control
+    lcd_cmd(0b01101100); // Follower control
+    
+    delay_ms(200);
+     
+    lcd_cmd(0b00111000); // Function set: 8-bit interface, normal instruction mode
+    lcd_cmd(0b00001100); // Display ON/OFF control: display ON, cursor OFF, blink OFF
+    lcd_cmd(0b00000001); // Clear display
+    
+    delay_ms(1);     
+}
+
+void lcd_setCursor(char row, char col) {
+    lcd_cmd(((0x40*row)+col) + 0b10000000);
+}
+
+void lcd_printChar(char data) {
+    I2C2CONbits.SEN = 1;
+    while(I2C2CONbits.SEN==1);
+    IFS3bits.MI2C2IF = 0;
+    
+    I2C2TRN = 0x7C;
+    while(IFS3bits.MI2C2IF ==0);
+    IFS3bits.MI2C2IF = 0 ;
+    
+    I2C2TRN = 0x40; 
+    while(IFS3bits.MI2C2IF == 0);
+    IFS3bits.MI2C2IF =0;
+    
+    I2C2TRN = data;
+    while(IFS3bits.MI2C2IF == 0);
+    IFS3bits.MI2C2IF =0;
+    
+    I2C2CONbits.PEN = 1;
+    while(I2C2CONbits.PEN == 1);
+}
+
+void lcd_printStr(const char s[]) {
+    int i, len, display_col;
+
+    len = strlen(s);
+
+    for (i = 0; i < 8; i++) {
+        lcd_setCursor(0, i);
+
+        display_col = i;
+        if (display_col < len) {
+            lcd_printChar(s[display_col]);
+        } else {
+            lcd_printChar(' ');
+        }
+    }
+}
+
+
+void lcd_scrollText(const char s[], int row, unsigned int delay_time) {
+    int i, len, start_col, display_col;
+
+    len = strlen(s);
+    for (start_col = 0; start_col <= len; start_col++) {
+        lcd_setCursor(row, 0);
+
+        for (i = 0; i < 8; i++) {
+            display_col = start_col + i;
+            if (display_col >= len) {
+                display_col -= len;
+            }
+            lcd_printChar(s[display_col]);
+        }
+
+        delay_ms(delay_time);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
