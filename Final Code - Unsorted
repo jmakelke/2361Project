@@ -26,152 +26,101 @@
 
 volatile int Temperature;
 volatile int value;
-////Just used to grab the temp from the ADC
-//
+
 int getTemp(){
 
-int Temp = Temperature;// Whatever the thing is from the board
+int Temp = Temperature;// Whatever the temperature is from the board
 
 return Temp;
 }
 
-
-
-
-
 void writeColor(double array1[], double array2[], double array3[], double array4[], double array5[], double array6[], double array7[], double array8[], int size){ 
 
+	for( int i=0; i < size; i++){
+  		if(array8[i] == 0){
+     		 	write_0();
+		}
+ 	 	else if(array8[i] == 1){
+      			write_1();
+		}    
+	}
+
+	for( int i=0; i < size; i++){
+ 		if(array7[i] == 0){
+     			write_0();
+		}
+  		else if(array7[i] == 1){
+      			write_1();
+		}    
+	}
 
 
-for( int i=0; i < size; i++){
-  if(array8[i] == 0){
+	for( int i=0; i < size; i++){
+  		if(array6[i] == 0){
+      			write_0();
+		}
+  		else if(array6[i] == 1){
+     			write_1();
+		}    
+	} 
 
-      write_0();
+	for( int i=0; i < size; i++){
+	 	if(array5[i] == 0){
+      			write_0();
+		}
+  		else if(array5[i] == 1){
+      			write_1();
+		}    
+	}
 
-}
-  else if(array8[i] == 1){
-
-      write_1();
-}    
-}
-
-
-
-for( int i=0; i < size; i++){
-  if(array7[i] == 0){
-
-      write_0();
-
-}
-  else if(array7[i] == 1){
-
-      write_1();
-}    
-}
-
-
-
-for( int i=0; i < size; i++){
-  if(array6[i] == 0){
-
-      write_0();
-
-}
-  else if(array6[i] == 1){
-
-      write_1();
-}    
-} 
+	for( int i=0; i < size; i++){
+  		if(array4[i] == 0){
+      			write_0();
+		}
+  		else if(array4[i] == 1){
+      			write_1();
+		}    
+	}
 
 
+	for( int i=0; i < size; i++){
+ 		if(array3[i] == 0){
+      			write_0();
+		}
+ 		else if(array3[i] == 1){
+    			write_1();
+		}    
+	}
 
-for( int i=0; i < size; i++){
-  if(array5[i] == 0){
+	for( int i=0; i < size; i++){
+  		if(array2[i] == 0){
+      			write_0();
+		}
+  		else if(array2[i] == 1){
+      			write_1();
+		}    
+	}
 
-      write_0();
-
-}
-  else if(array5[i] == 1){
-
-      write_1();
-}    
-}
-
-
-
-for( int i=0; i < size; i++){
-  if(array4[i] == 0){
-
-      write_0();
-
-}
-  else if(array4[i] == 1){
-
-      write_1();
-}    
-}
-
-
-
-for( int i=0; i < size; i++){
-  if(array3[i] == 0){
-
-      write_0();
-
-}
-  else if(array3[i] == 1){
-
-      write_1();
-}    
+	for( int i=0; i < size; i++){
+  		if(array1[i] == 0){
+     		 	write_0();
+		}
+ 		else if(array1[i] == 1){
+      			write_1();
+		}    
+	}
+ 	djo_wait_100us();   
 }
 
-
-
-for( int i=0; i < size; i++){
-  if(array2[i] == 0){
-
-      write_0();
-
-}
-  else if(array2[i] == 1){
-
-      write_1();
-}    
-}
-
-
-
-for( int i=0; i < size; i++){
-  if(array1[i] == 0){
-
-      write_0();
-
-}
-  else if(array1[i] == 1){
-
-      write_1();
-}    
-}
-
-
- djo_wait_100us();   
-}
-//
-//
 #define BUFFER_SIZE 128
-//
-//
-//
+
 int Tempmain(float Temp) { 
    
    
    
    //These arrays are going to be used to set the brightness, send the arrays in a certain order to the board. 
-   
-   //This may be a lot harder if we try to do different colors instead of brightness, but should be possible. 
-//   
+     
    double None[24]= {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-   //double RLow[24]= {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};  
    
    double BLow[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1};
    double BMid[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1};
@@ -194,94 +143,61 @@ int Tempmain(float Temp) {
    double RMid[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0};
    double RHigh[24]= {0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0};
    
-   
-    
-    //While statement will be used to constantly check the value of the temp value
-    
-
-//    {
-
-//Constantly gets the temperature. When mixed with the LCD code we should try to put all thats in main in this
-//function into the timer 2 interrupt so we don't need to use blocking code for the delay.
-
-//Temp = getTemp();
-
-
 //The way this works is it sends the array values in a certain order to change the brightness. '24' is just
 //used for the size variable in the function it is passed into. The first thing passed into the function
 //will be put onto the 8th LED, and the last spot will be on the 1st.
-//if(_T3IF == 1){
-//    _T3IF = 0;
-if (Temp > 80.5) {                       //LED 8 activated
 
-writeColor(RHigh, RMid, OLow, None, None, None, None, None, 24);
-setServo(2500);
-}
+	if (Temp > 80.5) {                       //LED 8 activated
+		writeColor(RHigh, RMid, OLow, None, None, None, None, None, 24);
+		setServo(2500);
+		}
 
-else if ((Temp > 80) && (Temp <= 80.5)) {   //LED  7 activated
-
-writeColor(RMid, RHigh, OMid, YLow, None, None, None, None, 24);
-
-setServo(2000);
-
-}
-else if ((Temp > 79.5) && (Temp <= 80)) {   //LED  6 activated
-
-writeColor(RLow, RMid, OHigh, YMid, YLow, None, None, None, 24);
-
-setServo(1500);
-}
-else if ((Temp > 79) && (Temp <= 79.5)) {  //LED  5 activated
-
-writeColor(None, RLow, OMid, YHigh, YMid, GLow, None, None, 24);
-
-setServo(1500);
-}
-else if ((Temp > 78.5) && (Temp <= 79)) { //LED 4 activated
-
-writeColor(None, None, OLow, YMid, YHigh, GMid, BLow, None, 24);
-
-setServo(0);
-}
-else if ((Temp > 78) && (Temp <= 78.5)) { //LED 3 activated
-
-writeColor(None, None, None, YLow, YMid, GHigh, BMid, BLow, 24);
-setServo(0);
-}
-else if ((Temp > 77.5) && (Temp <= 78)) { //LED 2 activated
-
-writeColor(None, None, None, None, YLow, GMid, BHigh, BMid, 24);
-setServo(0);
-}
-else if ((Temp > 0) && (Temp <= 77.5)) { //LED 1 activated
-
-writeColor(None, None, None, None, None, GLow, BMid, BHigh, 24);
-setServo(-1000);
-//}
-//    }
-}
-
-
+	else if ((Temp > 80) && (Temp <= 80.5)) {   //LED  7 activated
+		writeColor(RMid, RHigh, OMid, YLow, None, None, None, None, 24);
+		setServo(2000);
+		}
+		
+	else if ((Temp > 79.5) && (Temp <= 80)) {   //LED  6 activated
+		writeColor(RLow, RMid, OHigh, YMid, YLow, None, None, None, 24);
+		setServo(1500);
+		}
+		
+	else if ((Temp > 79) && (Temp <= 79.5)) {  //LED  5 activated
+		writeColor(None, RLow, OMid, YHigh, YMid, GLow, None, None, 24);
+		setServo(1500);
+		}
+	
+	else if ((Temp > 78.5) && (Temp <= 79)) { //LED 4 activated		
+		writeColor(None, None, OLow, YMid, YHigh, GMid, BLow, None, 24);
+		setServo(0);
+		}
+	
+	else if ((Temp > 78) && (Temp <= 78.5)) { //LED 3 activated
+		writeColor(None, None, None, YLow, YMid, GHigh, BMid, BLow, 24);
+		setServo(0);
+		}
+		
+	else if ((Temp > 77.5) && (Temp <= 78)) { //LED 2 activated
+		writeColor(None, None, None, None, YLow, GMid, BHigh, BMid, 24);
+		setServo(0);
+		}
+		
+	else if ((Temp > 0) && (Temp <= 77.5)) { //LED 1 activated
+		writeColor(None, None, None, None, None, GLow, BMid, BHigh, 24);
+		setServo(-1000);
+		}
+		
 return 0;
 }
 
-
-
-
-
-
-
 void setServo(int Val){
     
-OC1RS = Val; //writes to OC1R on the next iteration, just to be safe.    
-    
-}
+	OC1RS = Val; //writes to OC1R on the next iteration, just to be safe.    
+    }
 
 static int buffer[BUFFER_SIZE];
 static uint16_t bufferIndex = 0;
 static uint32_t bufferSum = 0;
-
-
 
 void putVal(int newValue) {
 	// Subtract the oldest value from the sum
