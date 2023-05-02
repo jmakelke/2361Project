@@ -216,17 +216,6 @@ int getAvg() {
 	return average;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 void initBuffer() {
 	// Initialize the buffer with zeros
 	for (uint16_t i = 0; i < BUFFER_SIZE; i++) {
@@ -261,9 +250,6 @@ __builtin_write_OSCCONL(OSCCON | 0x40);
 //What is happening here is we are unlocking the protection, turning on the output compare, then relocking it.    
 //That protection not necessarally used for output compare  
 
-
-
-//// Timer 3 setup should happen before this line
 OC1CON = 0;    // turn off OC1 for now
 OC1R = 1234;   // servo start position. We won?t touch OC1R again
 OC1RS = 1234;  // We will only change this once PWM is turned on
@@ -295,14 +281,7 @@ void initTimer3(void) {
     IEC0bits.T3IE = 1;             // Enable Timer 3 interrupt
     IFS0bits.T3IF = 0;             // Clear Timer 3 interrupt flag
     T3CONbits.TON = 1;             // Turn on Timer 3
-
-
 }
-
-
-
-
-
 
 void __attribute__((__interrupt__,__auto_psv__)) _T3Interrupt(void) {
     IFS0bits.T3IF = 0;       // Clear Timer 3 interrupt flag
@@ -314,9 +293,6 @@ void __attribute__((__interrupt__,__auto_psv__)) _ADC1Interrupt(void) {
     IFS0bits.AD1IF = 0;      // Clear ADC interrupt flag
     putVal(ADC1BUF0);        // Add ADC value to the buffer
 }
-
-
-
 
 
 void main(void) {
@@ -334,26 +310,21 @@ void main(void) {
     float Temp;
     char tempStr[20];
     
-    
     while (1) {
         // Calculate the average of the buffer values
         adValue = getAvg();
         float voltage = (3.3/1024) * adValue;
         Temp = (voltage-0.5) * 100;
         Temp= (Temp *9/5) +32;
-
-//}
         
-        if(spacer < 4){
-            
-        spacer++;                    
+        if(spacer < 4){  
+        	spacer++;                    
+       	}
+        else{ 
+        	Tempmain(Temp);
+        	spacer = 0;
         }
-        else{
-            
-        Tempmain(Temp);
-        spacer = 0;
-        
-        }
+	
         sprintf(tempStr, "%6.2f F", Temp);
         // Write the voltage value to the LCD
         lcd_printStr(tempStr);
@@ -364,16 +335,6 @@ void main(void) {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
 void delay_ms(unsigned int ms){
     while (ms-- > 0){
         asm("repeat #15998");
@@ -383,7 +344,7 @@ void delay_ms(unsigned int ms){
 
 void init(void){
     _RCDIV = 0;
-//
+
 TRISA = 0b1111111111111110;
  LATA = 0x0000; 
  //Set RCDIV=1:1 (default 2:1) 32MHz or FCY/2=16M
@@ -476,7 +437,6 @@ void lcd_printStr(const char s[]) {
     }
 }
 
-
 void lcd_scrollText(const char s[], int row, unsigned int delay_time) {
     int i, len, start_col, display_col;
 
@@ -495,19 +455,3 @@ void lcd_scrollText(const char s[], int row, unsigned int delay_time) {
         delay_ms(delay_time);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
