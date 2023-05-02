@@ -122,3 +122,37 @@ void lcd_scrollText(const char s[], int row, unsigned int delay_time) {
         delay_ms(delay_time);
     }
 }
+
+#define K 16 
+
+void initADC(void) {
+    AD1PCFGbits.PCFG1 = 0;         // Set AN0 as an analog input
+    AD1CON1 = 0x00E0;              // SSRC<2:0> = 010 to use Timer 3
+    AD1CON2 = 0;                   // Configure voltage reference (Vdd and GND)
+    AD1CON3 = 0x1F02;              // Sample time = 31 TAD, TAD = 2 * Tcy
+    AD1CSSL = 0;
+    AD1CHS = 0x0001;                 // No scanning required
+    IEC0bits.AD1IE = 1;            // Enable ADC interrupt
+    IFS0bits.AD1IF = 0;            // Clear ADC interrupt flag
+    AD1CON1bits.ADON = 1;          // Turn on ADC
+}
+
+void initTimer3(void) {
+    T3CON = 0x0010;                // Use prescaler 1:8 (500kHz)
+    PR3 = 3125;                    // Timer period = 500kHz / 16 = 31250; (16 samples per second)
+    TMR3 = 0;                      // Reset timer count
+    IEC0bits.T3IE = 1;             // Enable Timer 3 interrupt
+    IFS0bits.T3IF = 0;             // Clear Timer 3 interrupt flag
+    T3CONbits.TON = 1;             // Turn on Timer 3
+}
+
+void __attribute__((__interrupt__,__auto_psv__)) _T3Interrupt(void) {
+    IFS0bits.T3IF = 0;       // Clear Timer 3 interrupt flag
+    AD1CON1bits.SAMP = 1;    // Start sampling
+
+}
+
+void __attribute__((__interrupt__,__auto_psv__)) _ADC1Interrupt(void) {
+    IFS0bits.AD1IF = 0;      // Clear ADC interrupt flag
+    putVal(ADC1BUF0);        // Add ADC value to the buffer
+}
