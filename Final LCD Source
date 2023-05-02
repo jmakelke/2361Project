@@ -11,7 +11,11 @@ void delay_ms(unsigned int ms){
 
 void init(void){
     _RCDIV = 0;
-    AD1PCFG = 0xffff;
+
+TRISA = 0b1111111111111110;
+ LATA = 0x0000; 
+ //Set RCDIV=1:1 (default 2:1) 32MHz or FCY/2=16M
+AD1PCFG = 0x9ffd;            //sets all pins to digital I/O
 }
 
 void lcd_cmd(char cmd) {
@@ -99,7 +103,6 @@ void lcd_printStr(const char s[]) {
         }
     }
 }
-
 
 void lcd_scrollText(const char s[], int row, unsigned int delay_time) {
     int i, len, start_col, display_col;
