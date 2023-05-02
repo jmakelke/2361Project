@@ -31,3 +31,8 @@ OC1CONbits.OCM = 0b110; // Output compare PWM w/o faults
     _CN22PUE = 1;
     TRISB |= 100000000;
 }
+
+void setServo(int Val){
+    
+	OC1RS = Val; //writes to OC1R on the next iteration, just to be safe.    
+    }
