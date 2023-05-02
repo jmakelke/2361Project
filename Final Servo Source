@@ -1,0 +1,33 @@
+#include "xc.h"
+
+void initServo(void){
+
+TRISB &= 1111111111011111;
+T3CON = 0x0010; //Stop Timer, Tcy clk source, PRE 1:8
+
+T3CONbits.TCKPS = 0b01;
+T3CONbits.TCS = 0;
+
+TMR3 = 0;     // Initialize to zero (also best practice)
+PR3 = 39999; // Set period to be larger than max external sig duration
+
+T3CONbits.TON = 1; // Restart 16-bit Timer3   
+
+TRISBbits.TRISB6 = 0; // 0 output, 1 input. setting pin 6 as an output
+
+//Mapping the output compare to pin 6
+__builtin_write_OSCCONL(OSCCON & 0xBF); // used as a bit of protection
+RPOR3bits.RP6R = 18;    //set pin 6 to output compare
+//RPINR7bits.IC1R = 8;
+__builtin_write_OSCCONL(OSCCON | 0x40);    
+//What is happening here is we are unlocking the protection, turning on the output compare, then relocking it.    
+//That protection not necessarally used for output compare  
+
+OC1CON = 0;    // turn off OC1 for now
+OC1R = 1234;   // servo start position. We won?t touch OC1R again
+OC1RS = 1234;  // We will only change this once PWM is turned on
+OC1CONbits.OCTSEL = 1; // Use Timer 3 for compare source
+OC1CONbits.OCM = 0b110; // Output compare PWM w/o faults
+    _CN22PUE = 1;
+    TRISB |= 100000000;
+}
