@@ -1,0 +1,9 @@
+#ifndef SETSERVO_H
+#define SETSERVO_H
+
+#include "stdint.h"
+
+void initServo(void);
+void setServo(int Val);
+
+#endif
