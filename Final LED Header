@@ -1,0 +1,10 @@
+#ifndef LED_H
+#define LED_H
+
+#include "stdint.h"
+
+void getTemp(void);
+void writeColor(double array1[], double array2[], double array3[], double array4[], double array5[], double array6[], double array7[], double array8[], int size);
+int Tempmain(float Temp);
+
+#endif
