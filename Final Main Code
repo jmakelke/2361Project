@@ -1,1 +1,101 @@
 
+#include "xc.h"
+#include <p24FJ64GA002.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+
+#include "lab2B_header_v001.h"
+#include "circular_buffer.h" 
+#include "LCD.h" 
+#include "LED.h"
+#include "SETSERVO.h"
+
+// CW1: FLASH CONFIGURATION WORD 1 (see PIC24 Family Reference Manual 24.1)
+#pragma config ICS = PGx1          // Comm Channel Select (Emulator EMUC1/EMUD1 pins are shared with PGC1/PGD1)
+#pragma config FWDTEN = OFF        // Watchdog Timer Enable (Watchdog Timer is disabled)
+#pragma config GWRP = OFF          // General Code Segment Write Protect (Writes to program memory are allowed)
+#pragma config GCP = OFF           // General Code Segment Code Protect (Code protection is disabled)
+#pragma config JTAGEN = OFF        // JTAG Port Enable (JTAG port is disabled)
+
+
+// CW2: FLASH CONFIGURATION WORD 2 (see PIC24 Family Reference Manual 24.1)
+#pragma config I2C1SEL = PRI       // I2C1 Pin Location Select (Use default SCL1/SDA1 pins)
+#pragma config IOL1WAY = OFF       // IOLOCK Protection (IOLOCK may be changed via unlocking seq)
+#pragma config OSCIOFNC = ON       // Primary Oscillator I/O Function (CLKO/RC15 functions as I/O pin)
+#pragma config FCKSM = CSECME      // Clock Switching and Monitor (Clock switching is enabled, 
+                                       // Fail-Safe Clock Monitor is enabled)
+#pragma config FNOSC = FRCPLL      // Oscillator Select (Fast RC Oscillator with PLL module (FRCPLL))
+
+
+volatile int Temperature;
+#define BUFFER_SIZE 128
+
+
+static int buffer[BUFFER_SIZE];
+static uint16_t bufferIndex = 0;
+static uint32_t bufferSum = 0;
+
+
+
+#define K 16 
+
+
+
+void main(void) {
+    init();
+    initADC();
+    initTimer3();
+    lcd_init();
+    initServo();
+    // Initialize the circular buffer
+    initBuffer();
+
+    // Variables to store ADC value and string
+    int adValue;
+    int spacer = 0;
+    float Temp;
+    char tempStr[20];
+    
+    while (1) {
+        // Calculate the average of the buffer values
+        adValue = getAvg();
+        float voltage = (3.3/1024) * adValue;
+        Temp = (voltage-0.5) * 100;
+        Temp= (Temp *9/5) +32;
+        
+        if(spacer < 4){  
+        	spacer++;                    
+       	}
+        else{ 
+        	Tempmain(Temp);
+        	spacer = 0;
+        }
+	
+        sprintf(tempStr, "%6.2f F", Temp);
+        // Write the voltage value to the LCD
+        lcd_printStr(tempStr);
+
+
+        // Wait 100ms before updating the LCD
+        delay_ms(100);
+    }
+}
+
+void delay_ms(unsigned int ms){
+    while (ms-- > 0){
+        asm("repeat #15998");
+        asm("nop");
+    }
+}
+
+void init(void){
+    _RCDIV = 0;
+
+TRISA = 0b1111111111111110;
+ LATA = 0x0000; 
+ //Set RCDIV=1:1 (default 2:1) 32MHz or FCY/2=16M
+AD1PCFG = 0x9ffd;            //sets all pins to digital I/O
+}
+
+
